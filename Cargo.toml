@@ -1,0 +1,38 @@
+[package]
+name = "rg52-led"
+version = "1.0.0-alpha"
+edition = "2021"
+rust-version = "1.80"
+description = "Troca de cores dos LEDs RGB dos analogicos do RG52 Mini (AISLPC RK3562) em tempo real"
+license = "MIT"
+
+[lib]
+name = "rg52led"
+path = "src/lib.rs"
+
+[[bin]]
+name = "rg52-ledctl"
+path = "src/bin/rg52-ledctl.rs"
+
+[[bin]]
+name = "rg52-led"
+path = "src/main.rs"
+required-features = ["ui"]
+
+[features]
+default = ["ui"]
+# Interface grafica (SDL2). Sem ela so a biblioteca/protocolo compila:
+#   cargo test --no-default-features
+ui = ["dep:sdl2"]
+
+[dependencies]
+libc = "0.2"
+ab_glyph = "0.2"
+sdl2 = { version = "0.37", optional = true }
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+strip = true
+panic = "abort"
